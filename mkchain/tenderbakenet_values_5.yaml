@@ -37,25 +37,35 @@ activation:
   protocol_hash: ProtoALphaALphaALphaALphaALphaALphaALphaALphaDdp3zK
   protocol_parameters:
     # Specific to Tenderbake
-    consensus_committee_size: 67
-    consensus_threshold: 45
-    round_durations: [ "15", "30" ]
+    consensus_committee_size: 7000
+    consensus_threshold: 0
+    round_durations: [ "30", "45" ]
     liquidity_baking_subsidy: "2500000"
     liquidity_baking_sunset_level: 525600
     liquidity_baking_escape_ema_threshold: 1000000
+    endorsing_reward_per_slot: '2857'
+    # baking_security_deposit: "640000000"
+    # endorsing_security_deposit_per_slot: "91428"
+    baking_reward_fixed_portion: "10000000"
+    baking_reward_bonus_per_slot: "4286"
+    # validator_reward_per_slot: "2857"
+    validators_selection_offset: 5
+    minimal_participation_ratio: {"numerator": 1, "denominator": 4}
+    # max_slot_allocation_attempts_for_committee_selection: 42000
+    unfreeze_delay: 16384
     ########################
-    baking_reward_per_endorsement:
-    - '200000'
-    block_security_deposit: '512000000'
-    blocks_per_commitment: 4
-    blocks_per_cycle: 8
-    blocks_per_roll_snapshot: 4
-    blocks_per_voting_period: 64
-    cost_per_byte: '1000'
+    # baking_reward_per_endorsement:
+    # - '200000'
+    block_security_deposit: '640000000'
+    blocks_per_commitment: 64
+    blocks_per_cycle: 8192
+    blocks_per_roll_snapshot: 512
+    blocks_per_voting_period: 40960
+    cost_per_byte: '250'
     # delay_per_missing_endorsement: '1'
-    endorsement_reward:
-    - '2000000'
-    endorsement_security_deposit: '64000000'
+    # endorsement_reward:
+    # - '2000000'
+    endorsement_security_deposit: '9142'
     # endorsers_per_block: 32
     hard_gas_limit_per_block: '8000000'
     hard_gas_limit_per_operation: '800000'
@@ -74,6 +84,8 @@ activation:
     # - '10'
     # - '20'
     tokens_per_roll: '8000000000'
+    max_allocation_attempts: 42000
+
   should_include_commitments: false
 bootstrap_peers: []
 expected_proof_of_work: 0
