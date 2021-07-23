@@ -19,42 +19,62 @@ accounts:
     type: secret
   bootstrap3:
     bootstrap_balance: '4000000000000'
-    is_bootstrap_baker_account: true
+    is_bootstrap_baker_account: false
     key: edsk4R5vSo6TcJDKzHyEpBN4J43Zoq5hqgRxZR6CfxavprMVLsx3XH
+    type: secret
+  bootstrap4:
+    bootstrap_balance: '4000000000000'
+    is_bootstrap_baker_account: false
+    key: edsk2ofibH3K3t9aMZkabhNYSx84K8tSpDt8WDKrAZvcRS6PEsEbZx
+    type: secret
+  bootstrap5:
+    bootstrap_balance: '4000000000000'
+    is_bootstrap_baker_account: false
+    key: edsk3hqvSQqWqcT9qcEoKDCajFxPhD3Kis2NNsdbjKZHpe5PyBZp2E
     type: secret
 
 activation:
   protocol_hash: ProtoALphaALphaALphaALphaALphaALphaALphaALphaDdp3zK
   protocol_parameters:
     # Specific to Tenderbake
-    consensus_committee_size: 67
-    consensus_threshold: 45
-    round_durations: [ "15", "30" ]
+    consensus_committee_size: 7000
+    consensus_threshold: 0
+    round_durations: [ "30", "45" ]
     liquidity_baking_subsidy: "2500000"
-    liquidity_baking_sunset_level: 525600
+    liquidity_baking_sunset_level: 2032928
     liquidity_baking_escape_ema_threshold: 1000000
+    endorsing_reward_per_slot: '2857'
+    # baking_security_deposit: "640000000"
+    # endorsing_security_deposit_per_slot: "91428"
+    baking_reward_fixed_portion: "10000000"
+    baking_reward_bonus_per_slot: "4286"
+    # validator_reward_per_slot: "2857"
+    validators_selection_offset: 5
+    minimal_participation_ratio: {"numerator": 1, "denominator": 4}
+    # max_slot_allocation_attempts_for_committee_selection: 42000
+    unfreeze_delay: 16384
     ########################
-    baking_reward_per_endorsement:
-    - '200000'
-    block_security_deposit: '512000000'
-    blocks_per_commitment: 4
-    blocks_per_cycle: 8
-    blocks_per_roll_snapshot: 4
-    blocks_per_voting_period: 64
-    cost_per_byte: '1000'
+    # baking_reward_per_endorsement:
+    # - '200000'
+    block_security_deposit: '640000000'
+    blocks_per_commitment: 64
+    blocks_per_cycle: 8192
+    blocks_per_roll_snapshot: 512
+    blocks_per_voting_period: 40960
+    cost_per_byte: '250'
     # delay_per_missing_endorsement: '1'
-    endorsement_reward:
-    - '2000000'
-    endorsement_security_deposit: '64000000'
+    # endorsement_reward:
+    # - '2000000'
+    endorsement_security_deposit: '9142'
     # endorsers_per_block: 32
-    hard_gas_limit_per_block: '8000000'
-    hard_gas_limit_per_operation: '800000'
+    hard_gas_limit_per_block: '5200000'
+    hard_gas_limit_per_operation: '1040000'
     hard_storage_limit_per_operation: '60000'
     # initial_endorsers: 1
     michelson_maximum_type_size: 1000
     min_proposal_quorum: 500
     origination_size: 257
-    preserved_cycles: 2
+    preserved_cycles: 5
     proof_of_work_threshold: '-1'
     quorum_max: 7000
     quorum_min: 2000
@@ -64,6 +84,8 @@ activation:
     # - '10'
     # - '20'
     tokens_per_roll: '8000000000'
+    max_allocation_attempts: 42000
+
   should_include_commitments: false
 bootstrap_peers: []
 expected_proof_of_work: 0
@@ -79,26 +101,34 @@ node_config_network:
     protocol: PtYuensgYBb3G3x1hLLbCmcav8ue8Kyd2khADcL5LsT5R1hcXex
     timestamp: '2021-05-28T12:23:13.000000+00:00'
 nodes:
-  baking:
-    tezos-baking-node-0:
-      bake_using_account: bootstrap1
+  tezos-baking-node:
+    runs:
+    - baker
+    # - endorser
+    storage_size: 15Gi
+    instances:
+    - bake_using_accounts:
+      - bootstrap1
+      - bootstrap2
+#      - bootstrap3
       config:
         shell:
-          history_mode: archive
+          history_mode: full
       is_bootstrap_node: true
-    tezos-baking-node-1:
-      bake_using_account: bootstrap2
+    - bake_using_accounts:
+      - bootstrap3
+      - bootstrap4
       config:
         shell:
-          history_mode: archive
-      is_bootstrap_node: true
-    tezos-baking-node-2:
-      bake_using_account: bootstrap3
-      config:
-        shell:
-          history_mode: archive
+          history_mode: full
       is_bootstrap_node: false
-  regular: null
+    - bake_using_accounts:
+      - bootstrap5
+      config:
+        shell:
+          history_mode: full
+      is_bootstrap_node: false
+  tezos-node: null
 rolling_snapshot_url: null
 should_generate_unsafe_deterministic_data: false
 zerotier_config:
@@ -106,4 +136,4 @@ zerotier_config:
   zerotier_token: null
 
 tezos_k8s_images:
-  utils: tqtezos/tezos-k8s-utils:4.0.0
+  utils: tezos-k8s-utils:dev
